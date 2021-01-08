@@ -19,7 +19,7 @@ export default class CharDetails extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.charId !== prevProps.charId) {
+        if (this.props.itemId !== prevProps.itemId) {
             this.updateChar();
             this.setState({loading: true})
         }
@@ -35,13 +35,13 @@ export default class CharDetails extends Component {
 
 
     updateChar() {
-        const {charId} = this.props;
+        const {itemId} = this.props;
 
-        if (!charId) {
+        if (!itemId) {
             return
         }
 
-        this.gotService.getCharacter(charId)
+        this.gotService.getCharacter(itemId)
             .then((char) => {
                 this.setState({char, loading: false})
             })
