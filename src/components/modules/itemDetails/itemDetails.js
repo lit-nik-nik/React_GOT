@@ -4,12 +4,25 @@ import GotService from '../../../services/GotService';
 import Error from '../errorMessage';
 import Spinner from '../spinner';
 
-export default class CharDetails extends Component {
+const Field = ({item, field, label}) => {
+    return (
+        <ListGroupItem className="d-flex justify-content-between">  
+            <span className="font-weight-bold">{label}</span>
+            <span>{item[field]}</span>
+        </ListGroupItem>
+    )
+}
+
+export {
+    Field
+}
+
+export default class ItemDetails extends Component {
 
     gotService = new GotService();
 
     state = {
-        char: null,
+        item: null,
         loading: true,
         error: false
     }
@@ -26,11 +39,11 @@ export default class CharDetails extends Component {
     }
 
     componentDidCatch() {
-        this.setState({error: true, char: null})
+        this.setState({error: true, item: null})
     }
 
     onError(err) {
-        this.setState({error: true, char: null})
+        this.setState({error: true, item: null})
     }
 
 
@@ -42,16 +55,16 @@ export default class CharDetails extends Component {
         }
 
         this.gotService.getCharacter(itemId)
-            .then((char) => {
-                this.setState({char, loading: false})
+            .then((item) => {
+                this.setState({item, loading: false})
             })
             .catch(() => {this.onError()})
     }
 
     render() {
-        const {char, error, loading} = this.state;
+        const {item, error, loading} = this.state;
 
-        if (!char) {
+        if (!item) {
             return (
                 <Col className="p-3 mb-5 rounded bg-white">
                     <h4>Выберите персонажа</h4>
@@ -76,28 +89,17 @@ export default class CharDetails extends Component {
             )
         }
 
-        const {name, gender, born, died, culture} = char;
+        const {name} = item;
 
         return (
             <Col className="p-3 mb-5 rounded bg-white">
                 <h4 className="text-center mb-4">{name}</h4>
                 <ListGroup className="list-group-flush">
-                    <ListGroupItem className="d-flex justify-content-between">  
-                        <span className="font-weight-bold">Пол</span>
-                        <span>{gender}</span>
-                    </ListGroupItem>
-                    <ListGroupItem className="d-flex justify-content-between">  
-                        <span className="font-weight-bold">Дата рождения</span>
-                        <span>{born}</span>
-                    </ListGroupItem>
-                    <ListGroupItem className="d-flex justify-content-between">  
-                        <span className="font-weight-bold">Дата смерти</span>
-                        <span>{died}</span>
-                    </ListGroupItem>
-                    <ListGroupItem className="d-flex justify-content-between">  
-                        <span className="font-weight-bold">Культура</span>
-                        <span>{culture}</span>
-                    </ListGroupItem>
+                    {
+                        React.Children.map(this.props.children, (child) => {
+                            return React.cloneElement(child, {item})
+                        })
+                    }
                 </ListGroup>
             </Col>
         );
