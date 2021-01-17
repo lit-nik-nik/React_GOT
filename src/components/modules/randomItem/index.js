@@ -1,3 +1,6 @@
-import RandomItem from './randomItem';
+import RandomItem, {Field} from './randomItem';
 
 export default RandomItem;
+export {
+    Field
+}

@@ -1,5 +1,5 @@
 .app {
-    background: blue url('app.jpeg') center center no-repeat;
+    background: rgb(0, 183, 255) url('app.jpeg') center center no-repeat;
     background-size: cover;
     height: 1000px;	
 }

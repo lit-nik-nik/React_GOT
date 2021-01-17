@@ -2,21 +2,34 @@ import React, {Component} from 'react';
 import {Col, ListGroup, ListGroupItem}  from 'reactstrap';
 import GotService from '../../../services/GotService';
 import Spinner from '../spinner';
-import Error from '../errorMessage'
+import Error from '../errorMessage';
+
+const Field = ({item, field, label}) => {
+    return (
+        <ListGroupItem className="d-flex justify-content-between">  
+            <span className="font-weight-bold">{label}</span>
+            <span>{item[field]}</span>
+        </ListGroupItem>
+    )
+}
+
+export {
+    Field
+}
 
 export default class RandomItem extends Component {
 
     gotService = new GotService();
 
     state = {
-        char: {},
+        item: {},
         loading: true,
         error: false
     }
 
     componentDidMount() {
-        this.randomChar();
-        this.timerID = setInterval(this.randomChar, 15000);
+        this.randomItem();
+        this.timerID = setInterval(this.randomItem, 15000);
     }
 
     componentWillUnmount() {
@@ -30,8 +43,8 @@ export default class RandomItem extends Component {
         })
     }
 
-    onCharLoaded = (char) => {
-        this.setState({char, loading: false})
+    onItemLoaded = (item) => {
+        this.setState({item, loading: false})
     }
 
     onError = (err) => {
@@ -41,51 +54,44 @@ export default class RandomItem extends Component {
         })
     }
 
-    randomChar = () => {
-        this.gotService.getRandomCharacter()
-            .then(this.onCharLoaded)
+    randomItem = () => {
+        this.props.getRandomData()
+            .then(this.onItemLoaded)
             .catch(this.onError);
     }
 
     render() {
-        const {char, loading, error} = this.state;
-        const errorMessage = error ? <Error /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        const content = loading || error ? null : <View char = {char} />
+        const {item, loading, error} = this.state;
+
+        if (error) {
+            return (
+                <Col className="p-3 mb-5 rounded bg-white">
+                    <Error/>
+                </Col>
+            )
+        }
+
+        if (loading) {
+            return (
+                <Col className="p-3 mb-5 rounded bg-white">
+                    <Spinner/>
+                </Col>
+            )
+        }
+
         return (
-            <Col className="p-3 mb-2 rounded bg-white">
-                {errorMessage}
-                {spinner}
-                {content}
+            <Col lg="4">
+                <div className="p-2 rounded bg-white">
+                    <h4 className="text-center my-2">{this.props.label}: <br/> {item.name}</h4>
+                    <ListGroup className="list-group-flush">
+                        {
+                            React.Children.map(this.props.children, (child) => {
+                                return React.cloneElement(child, {item})
+                            })
+                        }
+                    </ListGroup>
+                </div>
             </Col>
         );
     }
-}
-
-const View = ({char}) => {
-    const {name, gender, born, died, culture} = char;
-
-    return (
-        <>
-            <h4 className="text-center my-2">Случайный персонаж: {name}</h4>
-            <ListGroup className="list-group-flush">
-                <ListGroupItem className="d-flex justify-content-between">
-                    <span className="font-weight-bold">Пол </span>
-                    <span>{gender}</span>
-                </ListGroupItem>
-                <ListGroupItem className="d-flex justify-content-between">
-                    <span className="font-weight-bold">Дата рождения </span>
-                    <span>{born}</span>
-                </ListGroupItem>
-                <ListGroupItem className="d-flex justify-content-between">
-                    <span className="font-weight-bold">Дата смерти </span>
-                    <span>{died}</span>
-                </ListGroupItem>
-                <ListGroupItem className="d-flex justify-content-between">
-                    <span className="font-weight-bold">Культура </span>
-                    <span>{culture}</span>
-                </ListGroupItem>
-            </ListGroup>
-        </>
-    )
 }

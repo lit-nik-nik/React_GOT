@@ -51,11 +51,19 @@ export default class ItemList extends Component {
 
 
         if (error) {
-            <Error/>
+            return (
+                <Col className="p-0 rounded bg-white">
+                    <Error/>
+                </Col>
+            )
         }
 
         if (!itemList) {
-            return <Spinner/>
+            return (
+                <Col className="p-0 rounded bg-white">
+                    <Spinner/>
+                </Col>
+            )
         }
         
         const content = this.renderList(itemList);

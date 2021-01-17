@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 
 const Header = () => {
     return (
-        <Row className="text-white clearfix">
+        <Row className="text-white clearfix mb-5">
             <Col className="float-left my-3" sm='6'>
                 <h5 className="text-uppercase font-weight-bold">
                     <Link 
