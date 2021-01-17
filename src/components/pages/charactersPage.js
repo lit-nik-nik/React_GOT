@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
-import Error from '../../modules/errorMessage';
-import RowBlock from '../../modules/rowBlock';
-import ItemDetails, {Field} from '../../modules/itemDetails';
-import ItemList from '../../modules/itemList';
+import Error from '../modules/errorMessage';
+import RowBlock from '../modules/rowBlock';
+import ItemDetails, {Field} from '../modules/itemDetails';
+import ItemList from '../modules/itemList';
+import GotService from '../../services/GotService';
+
 
 export default class CharactersPage extends Component {
+
+    gotService = new GotService();
 
     state = {
         label: 'Список персонажей',
@@ -32,14 +36,16 @@ export default class CharactersPage extends Component {
         const charList = (
             <ItemList 
                 onSelectItem={this.onSelectItem} 
-                getData = {this.props.getData}
-                numberPage = {this.props.numberPage}
+                getAllData = {this.gotService.getAllCharacters}
+                numberPage = {Math.floor(Math.random() * 40 + 3)}
                 label = {this.state.label}
                 renderItem = {({name, gender}) => `${name} - ${gender}`}/>
         )
 
         const charDetails = (
-            <ItemDetails itemId={this.state.itemId}>
+            <ItemDetails 
+                itemId={this.state.itemId}
+                getData={this.gotService.getCharacter}>
                 <Field field='gender' label = 'Пол'/>
                 <Field field='born' label = 'Дата рождения'/>
                 <Field field='died' label = 'Дата смерти'/>

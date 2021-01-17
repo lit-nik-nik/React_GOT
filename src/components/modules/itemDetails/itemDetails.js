@@ -28,12 +28,12 @@ export default class ItemDetails extends Component {
     }
 
     componentDidMount() {
-        this.updateChar();
+        this.updateItem();
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.itemId !== prevProps.itemId) {
-            this.updateChar();
+            this.updateItem();
             this.setState({loading: true})
         }
     }
@@ -47,14 +47,14 @@ export default class ItemDetails extends Component {
     }
 
 
-    updateChar() {
-        const {itemId} = this.props;
+    updateItem() {
+        const {itemId, getData} = this.props;
 
         if (!itemId) {
             return
         }
 
-        this.gotService.getCharacter(itemId)
+        getData(itemId)
             .then((item) => {
                 this.setState({item, loading: false})
             })
@@ -67,7 +67,7 @@ export default class ItemDetails extends Component {
         if (!item) {
             return (
                 <Col className="p-3 mb-5 rounded bg-white">
-                    <h4>Выберите персонажа</h4>
+                    <h4>Поиск элемента</h4>
                 </Col>
 
             )

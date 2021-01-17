@@ -11,8 +11,8 @@ export default class ItemList extends Component {
     }
 
     componentDidMount() {
-        const {getData, numberPage} = this.props;
-        getData(numberPage)
+        const {getAllData, numberPage} = this.props;
+        getAllData(numberPage)
             .then((itemList) => {
                 this.setState({itemList})
             })
@@ -27,9 +27,7 @@ export default class ItemList extends Component {
         this.setState({error: true, itemList: null})
     }
 
-
     renderList = (arr) => {
-        const {onSelectItem} = this.props;
 
         return arr.map((item) => {
             const {id} = item;
@@ -40,7 +38,7 @@ export default class ItemList extends Component {
                     action
                     key={id}
                     id={id}
-                    onClick={() => onSelectItem(id)}
+                    onClick={() => this.props.onSelectItem(id)}
                 >
                     {label}
                 </ListGroupItem>

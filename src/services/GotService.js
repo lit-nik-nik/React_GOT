@@ -90,6 +90,7 @@ export default class GotService {
 
     _transformHouse = (house) => {
         return {
+            id: house.url.match(/\d+$/g).join(''),
             name: house.name,
             region: house.region,
             words: house.words,
@@ -101,9 +102,10 @@ export default class GotService {
 
     _transformBook = (book) => {
         return {
+            id: book.url.match(/\d+$/g).join(''),
             name: book.name,
-            namberOfPages: book.namberOfPages,
-            publiser: book.publiser,
+            numberOfPages: book.numberOfPages,
+            publisher: book.publisher,
             released: book.released
         }
     }

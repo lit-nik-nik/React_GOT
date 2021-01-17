@@ -4,7 +4,7 @@ import GotService from '../../../services/GotService';
 import Spinner from '../spinner';
 import Error from '../errorMessage'
 
-export default class RandomChar extends Component {
+export default class RandomItem extends Component {
 
     gotService = new GotService();
 
