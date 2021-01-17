@@ -1,3 +1,5 @@
+
+
 export default class GotService {
     constructor() {
         this._apiBase = 'https://www.anapioficeandfire.com/api'
@@ -38,7 +40,7 @@ export default class GotService {
         return res.map(this._transformHouse);
     }
 
-    getAllBooks = async (page = 1, size = 10) => {
+    getAllBooks = async (page = 1, size = 15) => {
         const res = await this.getResourse(`/books?page=${page}&pageSize=${size}`);
         return res.map(this._transformBook);
     }
@@ -104,6 +106,7 @@ export default class GotService {
         return {
             id: book.url.match(/\d+$/g).join(''),
             name: book.name,
+            authors: book.authors,
             numberOfPages: book.numberOfPages,
             publisher: book.publisher,
             released: book.released
